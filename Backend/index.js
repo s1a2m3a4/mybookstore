@@ -1,32 +1,4 @@
-// import express from "express";
-// import dotenv from "dotenv";
-// import mongoose from "mongoose";
-// import cors from "cors";
 
-// import bookRoute from "./route/book.route.js";
-// import userRoute from "./route/user.route.js";
-
-// const app = express();
-// app.use(cors());
-// app.use(express.json())
-// dotenv.config();
-
-// const PORT = process.env.PORT || 4000;
-// const URI = process.env.MongoDBURI;
-
-// try {
-//     mongoose.connect(URI);
-//     console.log("connected to mongodb");
-// } catch (error) {
-//     console.log("error", error);
-// }
-
-// app.use("/book", bookRoute);
-// app.use("/user", userRoute);
-
-// app.listen(PORT, () => {
-//     console.log(`Server running on port ${PORT}`);
-// });
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
@@ -35,11 +7,14 @@ import cors from "cors";
 import bookRoute from "./route/book.route.js";
 import userRoute from "./route/user.route.js";
 import contactRoute from "./route/contact.route.js"; // Import contact route
+import path from "path"
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 dotenv.config();
+
+const _dirname=path.resolve();
 
 const PORT = process.env.PORT || 4000;
 const URI = process.env.MongoDBURI;
@@ -55,6 +30,10 @@ app.use("/book", bookRoute);
 app.use("/user", userRoute);
 app.use("/contact", contactRoute); // Add contact route
 
+app.use(express.static(path.join(_dirname,"/frontend/dist")))
+app.get('*',(_,res)=>{
+    res.sendFile(path.resolve(_dirname,"frontend","dist","index.html"))
+})
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
